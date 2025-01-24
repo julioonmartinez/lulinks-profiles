@@ -1,4 +1,5 @@
 import type { ProfileResposeBackend } from "../types/profile";
+import type { WidgetUnion } from "../types/widget";
 
 const apiBaseUrl = 'https://api-izb6asxh2a-uc.a.run.app/api';
 
@@ -18,14 +19,15 @@ export async function getAllStyleProfiles(profileId: string) {
 }
 
 // Obtener widgets activos del perfil
-export async function getActiveWidgets(profileId: string) {
+export async function getActiveWidgets(profileId: string):Promise<WidgetUnion[]> {
   try {
     const response = await fetch(`${apiBaseUrl}/profile/${profileId}/widgets/active`);
     if (!response.ok) {
       throw new Error(`Error al obtener widgets: ${response.statusText}`);
     }
-    const data = await response.json();
-    return data;
+    const data:WidgetUnion[] = await response.json();
+    const sortingWidgets = data.sort((a,b)=> a.position! - b.position!)
+    return sortingWidgets;
   } catch (error) {
     console.error('Error al obtener widgets:', error);
     return []; // Retorna una lista vacía si hay errores

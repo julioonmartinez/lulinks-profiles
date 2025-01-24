@@ -1,0 +1,57 @@
+---
+import { StylesProfile } from "../../../types/styles-profile";
+import type { LinkWidget } from "../../../types/widget";
+import './LinkWidget.scss'
+interface Props {
+    widget:LinkWidget
+    styles: StylesProfile
+}
+const { widget, styles } = Astro.props as Props;
+
+---
+
+<a
+  href={widget.url}
+  class={`link-widget ${styles.buttonShape || ''} ${widget.vibrate ? widget.animation || 'vibrate' : ''} ${widget.stylesButton || 'style1'}`}
+  style={`background-color: ${widget.activeColor ? widget.backgroundColor || styles.fontColor : styles.buttonColorTransparent ? 'transparent' : styles.buttonColor}; 
+          color: ${widget.activeColor ? widget.colorFont || styles.buttonColor : styles.fontColor}; 
+          box-shadow: ${styles.boxShadow}; 
+          border: ${styles.buttonBorder ? `${styles.borderWidth}px solid ${styles.buttonColorBorder}` : 'none'};`}
+>
+  <div class="content-first-icon">
+    {widget.activeImage ? (
+      <img class="image" src={widget.urlImage} alt="" />
+    ) : (
+      <i class={widget.icon || 'fa-solid fa-link'}></i>
+    )}
+  </div>
+  <div class="content-name-link">
+    <p style={`font-family: ${widget.font || ''}; font-weight: ${widget.weightFont || ''};`} class="name-link">
+      {widget.name || 'Visita mi web'}
+    </p>
+  </div>
+  {widget.stylesButton === 'style2' && (
+    <div class="content-second-icon">
+      <i class="fa-solid fa-arrow-right second-icon"></i>
+    </div>
+  )}
+  {widget.stylesButton === 'style3' && (
+    <div class="content-second-icon">
+      {widget.activeSecundaryTex ? (
+        <div
+          class={`content-secundary-text ${styles.buttonShape || ''}`}
+          style={`background-color: ${widget.activeColorSecondaryText ? widget.backgroundColorSecondaryText : styles.buttonColor}; 
+                  color: ${widget.activeColorSecondaryText ? widget.colorFontSecondary : styles.fontColor};`}
+        >
+          {widget.subtitleSecondaryText && <p class="subtitle">{widget.subtitleSecondaryText}</p>}
+          {widget.secondaryTex && <p class="text">{widget.secondaryTex}</p>}
+        </div>
+      ) : (
+        <i class="fa-solid fa-arrow-right second-icon"></i>
+      )}
+    </div>
+  )}
+</a>
+<style>
+    
+</style>
