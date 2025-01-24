@@ -1,0 +1,26 @@
+---
+import type { Profile } from '../../types/profile';
+// Perfil por defecto mientras se carga el real
+const defaultProfile: Profile = {
+  uuid: '',
+  userName: 'Cargando...',
+  name: 'Nombre no disponible',
+  status: true,
+  socialMedia: [],
+};
+
+---
+<html lang="es">
+  <head>
+    <title>Perfil</title>
+  </head>
+  <body>
+    <div id="profile-container">
+      <h1  >{defaultProfile.name} </h1>
+
+    
+
+    </div>
+  </body>
+</html>
+
