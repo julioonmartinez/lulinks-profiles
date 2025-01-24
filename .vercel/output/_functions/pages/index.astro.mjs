@@ -11,7 +11,7 @@ const $$Index = createComponent(($$result, $$props, $$slots) => {
     status: true,
     socialMedia: []
   };
-  return renderTemplate`<html lang="es"> <head><title>Perfil</title>${renderHead()}</head> <body> <div id="profile-container"> <h1>${defaultProfile.name} </h1> </div> </body></html>`;
+  return renderTemplate`<html lang="es"> <head><title>Perfil</title>${renderHead()}</head> <body> <div id="profile-container"> <h1>${defaultProfile.name} Hola de prueba </h1> </div> </body></html>`;
 }, "/home/julioonmartinez/astro/nebulous-nova/src/pages/index.astro", undefined);
 
 const $$file = "/home/julioonmartinez/astro/nebulous-nova/src/pages/index.astro";
