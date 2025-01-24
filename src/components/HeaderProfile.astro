@@ -37,7 +37,7 @@ export const prerender = false; // Configuración dinámica
   class:list={[
     'profile-hero',
     styles?.modelHeader || 'center',
-    styles?.modelHeader === 'line' && styles?.positionAvatar || 'left',
+    styles?.modelHeader === 'line' ? (styles?.positionAvatar || 'left') : '',
     styles?.banner && 'banner',
     styles?.adaptativeProfile ? 'adaptative' : 'no-adaptative',
   ]}

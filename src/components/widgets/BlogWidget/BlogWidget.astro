@@ -1,0 +1,45 @@
+---
+import { StylesProfile } from '../../../types/styles-profile'
+import CardPost from '../../CardPost/CardPost.astro'
+import type { BlogWidget } from '../../../types/widget'
+import './BlogWidget.scss'
+interface Props {
+  widget: BlogWidget,
+  styles: StylesProfile
+}
+
+const { widget, styles } = Astro.props as Props;
+---
+
+<div class="content-title" style={`color: ${styles.fontColor};`}>
+  {widget.showIcon && (
+    <div
+      class={`content-icon ${styles.buttonShape}`}
+      style={{
+        backgroundColor: styles.buttonColor,
+        color: styles.fontColor,
+        boxShadow: styles.boxShadow,
+        border: styles.buttonBorder ? `1px solid ${styles.buttonColorBorder}` : 'none'
+      }}
+    >
+      <i class={widget.icon}></i>
+    </div>
+  )}
+  <p class="title-section">{widget.blogName}</p>
+</div>
+
+<div class="content-section-container">
+ 
+
+  <div
+    class={`content-section ${widget.layoutStyle || 'list'} ${styles.adaptativeProfile ? 'desktop' : ''}`}
+   
+  >
+    {widget.posts.map((wid, index) => (
+      <div class="widget post">
+       <CardPost post={wid} styles={styles} styleCard={wid.cardStyle} />
+      </div>
+    ))}
+  </div>
+</div>
+

@@ -1,11 +1,16 @@
 ---
+// Importa el layout
+import UserLayout from '../layouts/UserLayout.astro';
 import HeaderProfile from '../components/HeaderProfile.astro';
+import LinkWidget from '../components/widgets/LinkWidget/LinkWidget.astro';
 import { getAllStyleProfiles, getActiveWidgets, getProfileByUsername } from '../utils/api';
 import type { StylesProfile } from '../types/styles-profile';
 import type { WidgetUnion } from '../types/widget';
-import { type Profile } from '../types/profile';
-import '../styles/global.scss'
-// Extraemos el parámetro dinámico "username" de la URL
+import '../styles/global.scss';
+import './username.scss'
+import { Profile } from '../types/profile';
+
+
 const { username } = Astro.params;
 
 const profileResponse = await getProfileByUsername(username!);
@@ -13,23 +18,20 @@ const profile: Profile | null = profileResponse?.data || null;
 const styles: StylesProfile | null = await getAllStyleProfiles(profile?.id!);
 const widgets: WidgetUnion[] = await getActiveWidgets(profile?.id!);
 
-console.log(profile, styles, widgets)
-export const prerender = false; // Configuración dinámica
+console.log(styles);
+console.log(profile)
+console.log(widgets)
+export const prerender = false;
 ---
 
-<html lang="es">
-  <head>
-    <title>{username}</title>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <!-- Renderiza el HeaderProfile con server:defer -->
-    <HeaderProfile server:defer profile={profile!} widgets={widgets} styles={styles!} >
-      <!-- Contenido de fallback mientras se carga el HeaderProfile -->
-      <!-- <h2 slot="fallback">Cargando perfil...</h2> -->
-    </HeaderProfile>
-  </body>
-</html>
+<UserLayout profile={profile!} styles={styles!}>
+  <HeaderProfile profile={profile!} widgets={widgets!} styles={styles!} />
+  <div  class:list={[
+    'widgets',
+    styles.banner && 'banner',
+    styles?.adaptativeProfile ? 'adaptative' : 'no-adaptative',
+  ]}  >
+    {widgets.map((widget)=>(widget.type === 'link' && <LinkWidget widget={widget} styles={styles} />))}
+  </div>
+</UserLayout>
+

@@ -1,0 +1,179 @@
+---
+import { StylesProfile } from "../../types/styles-profile"
+import { PostWidget } from "../../types/widget"
+import { lightenColor, darkenColor, isColorLight } from '../../utils/colorProcessing';
+import './CardPost.scss'
+interface Props {
+    post: PostWidget,
+    styles: StylesProfile,
+    styleCard: string
+}
+const defaultImage = 'https://firebasestorage.googleapis.com/v0/b/lulinks-7e45f.firebasestorage.app/o/web%2Fproduct-example.webp?alt=media&token=cbdf2c7d-8631-4a6c-8508-26ba0a4e93ce'; // Ruta a una imagen predeterminada
+
+const handleLinkClick = (e) => {
+  e.preventDefault(); // Para evitar que el enlace redirija.
+  console.log('¡Enlace clickeado!');
+};
+const {post, styles, styleCard} = Astro.props as Props;
+---
+<!-- DISEÑO 1: Moderno y Minimalista -->
+{(styleCard === "style1" || styleCard === undefined) && (
+  <div
+    class="card-style-1"
+    class:list={[
+      styles.buttonShape,
+    ]}
+    style={{
+      backgroundColor: styles.buttonColor,
+      color: styles.fontColor,
+      boxShadow: styles.boxShadow,
+      border: styles.buttonBorder ? `1px solid ${styles.buttonColorBorder}` : "none",
+    }}
+  >
+    <img 
+      src={post.coverImage || defaultImage}
+      loading="lazy"
+      alt="Cover Image"
+      class="cover-image"
+    />
+    <div class="content-wrapper">
+      <h3 class="title" style={{ color: styles.fontColor }}>
+        {post.title}
+      </h3>
+      <h4 class="subtitle" style={{ color: lightenColor(styles.fontColor, 30) }}>
+        {post.subtitle}
+      </h4>
+      <p class="short-description">{post.shortDescription}</p>
+      <div class="interaction-bar">
+        {post.links2.map((btn) => (
+          <a
+            class="cta"
+            href={btn.url}
+            style={{
+              color: btn.activeColorFont
+                ? btn.colorFont || styles.fontColor
+                : styles.fontColor || "#2b2b2b",
+              backgroundColor: btn.activeBackgroundColor
+                ? btn.backgroundColor || styles.buttonColor
+                : styles.buttonColor || "#ffff",
+              border: btn.activeColor
+                ? btn.activeBorderColor
+                  ? `1px solid ${btn.borderColor || styles.buttonColorBorder}`
+                  : ""
+                : `1px solid ${styles.buttonColorBorder || "#2b2b2b"}`,
+            }}
+          >
+            <i class={btn.icon}></i>
+            <p>{btn.name}</p>
+          </a>
+        ))}
+        {post.linkPost && (
+          <a
+         
+          class="cta post-btn"
+            style={{
+              color: styles.fontColor,
+              backgroundColor: styles.buttonColor,
+              border: styles.buttonBorder ? `1px solid ${styles.buttonColorBorder}` : "none",
+            }}
+            
+          >
+            <i class="fa-solid fa-rocket"></i>
+            <p>Leer más</p>
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+)}
+
+<!-- DISEÑO 2: Elegante y Dinámico -->
+{styleCard === "style2" && (
+  <div
+    class="card-style-2"
+    class:list={[
+      styles.buttonShape,
+    ]}
+    style={{
+      backgroundColor: styles.buttonColor,
+      color: styles.fontColor,
+      boxShadow: styles.boxShadow,
+      border: styles.buttonBorder ? `1px solid ${styles.buttonColorBorder}` : "none",
+    }}
+  >
+    <div class="content-image">
+      {post.coverImage && (
+        <img src={post.coverImage || defaultImage} alt="Cover Image" class="cover-image" />
+      )}
+    </div>
+    <div class="content-card">
+      {post.title && (
+        <div class="short-title">
+          <p>{post.title}</p>
+        </div>
+      )}
+      {post.subtitle && (
+        <div class="subtitle">
+          <p>{post.subtitle}</p>
+        </div>
+      )}
+      {post.activeStylesShip && post.tags.length > 0 && (
+        <div class="content-tags">
+          {post.tags.map((tag) => (
+            <div
+              class="tag"
+              style={{
+                backgroundColor: post.backgroundColorShip || "#fff",
+                color: post.fontColorShip || "#2b2b2b",
+              }}
+            >
+              <span>{tag}</span>
+            </div>
+          ))}
+        </div>
+      )}
+      <div class="short-description">
+        <p>{post.shortDescription}</p>
+      </div>
+      <div class="links">
+        {post.links2.map((link) => (
+          <a
+            class="link"
+            class:list={[styles.buttonShape]}
+            style={{
+              color: link.activeColor
+                ? link.activeColorFont
+                  ? link.colorFont || styles.fontColor
+                  : styles.fontColor || "#2b2b2b"
+                : styles.fontColor,
+              backgroundColor: link.activeBackgroundColor
+                ? link.backgroundColor || styles.buttonColor
+                : styles.buttonColor || "#ffff",
+              border: link.activeColor
+                ? link.activeBorderColor
+                  ? `1px solid ${link.borderColor || styles.buttonColorBorder}`
+                  : ""
+                : `1px solid ${styles.buttonColorBorder || "#2b2b2b"}`,
+            }}
+          >
+            <i class={link.icon}></i>
+            <p>{link.name}</p>
+          </a>
+        ))}
+        {post.linkPost && (
+          <a
+            class="link post-btn"
+            style={{
+              color: styles.fontColor,
+              backgroundColor: styles.buttonColor,
+              border: styles.buttonBorder ? `1px solid ${styles.buttonColorBorder}` : "none",
+            }}
+          >
+            <i class="fa-solid fa-rocket"></i>
+            <p>Leer más</p>
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+)}
