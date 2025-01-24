@@ -3,15 +3,15 @@ import HeaderProfile from '../components/HeaderProfile.astro';
 import { getAllStyleProfiles, getActiveWidgets, getProfileByUsername } from '../utils/api';
 import type { StylesProfile } from '../types/styles-profile';
 import type { WidgetUnion } from '../types/widget';
-import { Profile } from '../types/profile';
+import { type Profile } from '../types/profile';
 import '../styles/global.scss'
 // Extraemos el parámetro dinámico "username" de la URL
 const { username } = Astro.params;
 
-const profileResponse = await getProfileByUsername(username);
+const profileResponse = await getProfileByUsername(username!);
 const profile: Profile | null = profileResponse?.data || null;
-const styles: StylesProfile | null = await getAllStyleProfiles(profile.id);
-const widgets: WidgetUnion[] = await getActiveWidgets(profile.id);
+const styles: StylesProfile | null = await getAllStyleProfiles(profile?.id!);
+const widgets: WidgetUnion[] = await getActiveWidgets(profile?.id!);
 
 console.log(profile, styles, widgets)
 export const prerender = false; // Configuración dinámica
@@ -27,7 +27,7 @@ export const prerender = false; // Configuración dinámica
   </head>
   <body>
     <!-- Renderiza el HeaderProfile con server:defer -->
-    <HeaderProfile server:defer profile={profile} widgets={widgets} styles={styles} >
+    <HeaderProfile server:defer profile={profile!} widgets={widgets} styles={styles!} >
       <!-- Contenido de fallback mientras se carga el HeaderProfile -->
       <!-- <h2 slot="fallback">Cargando perfil...</h2> -->
     </HeaderProfile>
