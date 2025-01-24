@@ -11,5 +11,5 @@ export default defineConfig({
       port: 4200 // Cambia el puerto aquí
     },
 
-  adapter: vercel(),
+    adapter: vercel(),
 });
