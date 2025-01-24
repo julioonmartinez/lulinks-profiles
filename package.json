@@ -9,6 +9,9 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.1.9"
+    "astro": "^5.0.0-beta.12"
+  },
+  "devDependencies": {
+    "sass": "^1.83.4"
   }
 }

@@ -1,0 +1,29 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    height: 100%;
+    font-size: 100%; /* Restaura el tamaño de fuente base */
+    font-family: sans-serif; /* Establece una fuente predeterminada */
+  }
+  
+  img, video {
+    max-width: 100%; /* Previene el desbordamiento de imágenes/videos */
+    height: auto;
+  }
+  
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+  
+  ul, ol {
+    list-style: none; /* Elimina estilos de listas */
+  }
+  
+  button, input, textarea, select {
+    all: unset; /* Elimina todos los estilos nativos */
+  }

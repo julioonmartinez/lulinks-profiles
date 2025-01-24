@@ -1,0 +1,169 @@
+---
+import type { Profile } from '../types/profile';
+import type { StylesProfile } from '../types/styles-profile';
+import type { WidgetUnion } from '../types/widget'; // Si tienes este tipo definido
+
+import './HeaderProfile.scss';
+
+// Definición de props con TypeScript
+interface Props {
+  styles: StylesProfile;
+  profile: Profile;
+  widgets?: WidgetUnion[];
+}
+
+// Extraer los props pasados desde el padre
+const { styles, profile, widgets } = Astro.props as Props;
+
+const defaultImageProfile =
+  'https://firebasestorage.googleapis.com/v0/b/lulinks-7e45f.firebasestorage.app/o/profiles%2Fdefault-image-profile.webp?alt=media&token=44d2e1e3-1994-4468-8271-24529c580ce9';
+
+// Función para generar el estilo dinámico de fondo
+const getBackgroundStyle = (): string => {
+  if (styles?.typeBackground === 'color') {
+    return styles.backgroundColor || '#ffffff';
+  }
+  if (styles?.typeBackground === 'image') {
+    return `url(${styles.backgroundImage})`;
+  }
+  if (styles?.typeBackground === 'gradient') {
+    return styles.backgroundGradient || 'linear-gradient(to right, #fff, #000)';
+  }
+  return '#ffffff';
+};
+export const prerender = false; // Configuración dinámica
+---
+<section
+  class:list={[
+    'profile-hero',
+    styles?.modelHeader || 'center',
+    styles?.modelHeader === 'line' && styles?.positionAvatar || 'left',
+    styles?.banner && 'banner',
+    styles?.adaptativeProfile ? 'adaptative' : 'no-adaptative',
+  ]}
+  style={`text-shadow: ${styles?.textShadow || 'none'}`}
+>
+  <div
+    class:list={[
+      'content-avatar',
+      styles?.modelHeader || 'center',
+    ]}
+  >
+    <div
+      class:list={[
+        'avatar-image-content',
+        styles?.banner && 'banner',
+        styles?.avatarShape || 'circle',
+        styles?.modelHeader || 'center',
+        profile?.activeSpecialShip && 'special-ship',
+      ]}
+    >
+      <div
+        class:list={[styles?.avatarShape || 'circle', 'content-image']}
+        style={`background: ${styles?.banner ? getBackgroundStyle() : ''}`}
+      >
+        <img
+          src={profile?.urlImage || 'https://via.placeholder.com/150'}
+          class:list={[
+            'avatar',
+            styles?.avatarShape || 'circle',
+            styles?.sizeAvatar || 'medium',
+          ]}
+          alt="Avatar del usuario"
+        />
+      </div>
+      {profile?.activeSpecialShip && (
+        <div
+          class:list={[
+            'content-special-ship',
+            styles?.buttonShape || '',
+            profile?.activeSpecialColorBorder && 'special-border',
+          ]}
+          style={`background-color: ${
+            profile?.activeColorBackgroundSpecialShip
+              ? profile?.backgroundColorSpecialShip || styles?.buttonColor
+              : styles?.buttonColor
+          };
+          color: ${
+            profile?.activeTextColorSpecialShip
+              ? profile?.colorTextSpecialShip || styles?.fontColor
+              : styles?.fontColor
+          };
+          border: ${
+            profile?.activeSpecialColorBorder
+              ? 'none'
+              : styles?.buttonBorder
+              ? `1px solid ${styles?.buttonColorBorder}`
+              : 'none'
+          }`}
+        >
+          <p>{profile?.contentSpecialShip}</p>
+        </div>
+      )}
+    </div>
+  </div>
+  <div class="content-info-profile">
+    <p
+      class:list={[
+        'name-profile',
+        styles?.sizeName ? '' : 'name-profile-undefined',
+      ]}
+      style={`font-size: ${styles?.sizeName}px`}
+    >
+      {profile?.name || profile?.userName || 'Nombre no disponible'}
+    </p>
+    <p class="description">
+      {profile?.description || 'Descripción no disponible'}
+    </p>
+  </div>
+  {profile?.activeSocialMedia &&
+    (!profile?.posicionSocialMedia ||
+      profile?.posicionSocialMedia === 'top') && (
+      <div class:list={['content-social-media', profile?.typeButtonSocialMedia || 'icon']}>
+        {profile?.activeContact && (
+          <a
+            class:list={[
+              'social-media-btn',
+              styles?.buttonShape || '',
+              profile?.typeButtonSocialMedia || 'icon',
+            ]}
+            style={`background-color: ${styles?.buttonColor};
+              color: ${styles?.fontColor};
+              border: ${
+                styles?.buttonBorder
+                  ? `1px solid ${styles?.buttonColorBorder}`
+                  : 'none'
+              }`}
+            href="#contact"
+          >
+            <i class="fa-solid fa-envelope"></i>
+            {profile?.typeButtonSocialMedia === 'large' && (
+              <p class="name-btn">Contacto</p>
+            )}
+          </a>
+        )}
+        {profile?.socialMedia?.map((socialMedia) => (
+          <a
+            class:list={[
+              'social-media-btn',
+              styles?.buttonShape || '',
+              profile?.typeButtonSocialMedia || 'icon',
+            ]}
+            style={`background-color: ${styles?.buttonColor};
+              color: ${styles?.fontColor};
+              border: ${
+                styles?.buttonBorder
+                  ? `1px solid ${styles?.buttonColorBorder}`
+                  : 'none'
+              }`}
+            href={socialMedia.url}
+          >
+            <i class={socialMedia.icon}></i>
+            {profile?.typeButtonSocialMedia === 'large' && (
+              <p class="name-btn">{socialMedia.name}</p>
+            )}
+          </a>
+        ))}
+      </div>
+    )}
+</section>
