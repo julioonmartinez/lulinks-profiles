@@ -1,15 +1,19 @@
 ---
 // Importa el layout
 import UserLayout from '../layouts/UserLayout.astro';
-import HeaderProfile from '../components/HeaderProfile.astro';
+import HeaderProfile from '../components/HeaderProfile/HeaderProfile.astro';
 import LinkWidget from '../components/widgets/LinkWidget/LinkWidget.astro';
 import BlogWidget from '../components/widgets/BlogWidget/BlogWidget.astro'
+import TimelineWidget from '../components/widgets/TimelineWidget/TimelineWidget.astro';
+import SectionWidget from '../components/widgets/SectionWidget/SectionWidget.astro';
+import ScheduleWidget from '../components/widgets/ScheduleWidget/ScheduleWidget.astro';
+import PostWidget from '../components/widgets/PostWidget/PostWidget.astro';
 import { getAllStyleProfiles, getActiveWidgets, getProfileByUsername } from '../utils/api';
 import type { StylesProfile } from '../types/styles-profile';
 import type { WidgetUnion } from '../types/widget';
 import '../styles/global.scss';
 import './username.scss'
-import { Profile } from '../types/profile';
+import type { Profile } from '../types/profile';
 
 
 const { username } = Astro.params;
@@ -26,22 +30,42 @@ export const prerender = false;
 ---
 
 <UserLayout profile={profile!} styles={styles!}>
-  <HeaderProfile profile={profile!} widgets={widgets!} styles={styles!} />
-  <div  class:list={[
+  <div class:list={[
+    'profile-container',
+    styles?.adaptativeProfile ? 'adaptative-profile' : 'no-adaptative',
+  ]}>
+  <div class="header">
+    <HeaderProfile  profile={profile!} widgets={widgets!} styles={styles!} />
+
+  </div>
+<div  class:list={[
     'widgets',
-    styles.banner && 'banner',
+    styles?.banner && 'banner',
     styles?.adaptativeProfile ? 'adaptative' : 'no-adaptative',
   ]}  >
     {widgets.map((widget) => {
       if (widget.type === 'link') {
-        return <LinkWidget widget={widget} styles={styles} />;
+        return <LinkWidget widget={widget} styles={styles!} />;
       }
       if (widget.type === 'blog') {
-        return <BlogWidget widget={widget} styles={styles} />;
+        return <BlogWidget widget={widget} styles={styles!} />;
+      }
+      if(widget.type === 'timeline'){
+        return <TimelineWidget widget={widget} styles={styles!} />
+      }
+      if(widget.type == 'listWidget' ){
+        return <SectionWidget widget={widget} styles={styles!} />
+      }
+      if(widget.type == 'schedule' ){
+        return <ScheduleWidget widget={widget} styles={styles!}  />
+      }
+      if(widget.type == 'post' ){
+        return <PostWidget widget={widget} styles={styles!} />
       }
       // Puedes manejar otros casos aquí si es necesario
       return <p>Widget no encontrado</p> ; // Retorna `null` explícitamente si no hay coincidencia
     })}
+  </div>
   </div>
 </UserLayout>
 

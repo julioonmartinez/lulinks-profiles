@@ -1,0 +1,93 @@
+---
+import type { ScheduleWidget } from '../../../types/widget'
+import type {StylesProfile} from '../../../types/styles-profile';
+import './ScheduleWidget.scss'
+interface Props {
+    widget: ScheduleWidget,
+    styles: StylesProfile
+}
+const {widget, styles} = Astro.props
+let expanded = false
+const toggleExpand=()=> {
+  expanded = !expanded;
+}
+---
+  
+<div
+  class:list={[
+    'schedule-widget',
+    styles.buttonShape
+  ]}
+  style={{
+   backgroundColor: styles.buttonColor,
+      color: styles.fontColor,
+      boxShadow: styles.boxShadow,
+      border: styles.buttonBorder ? `1px solid ${styles.buttonColorBorder}` : "none",
+  }}
+>
+  <!-- Header del Acordeón -->
+  <div class="accordion-header">
+    <i class="fa-solid fa-clock"></i>
+    <span>Horario de Atención</span>
+    <i class="fa fa-chevron-down icon expanden"></i>
+  </div>
+
+  <!-- Contenido del Acordeón -->
+  <div class="accordion-content">
+    <ul class="business-hours">
+      {widget.businessHours!.map((hour) => (
+        <li>
+          <span class="day">{hour.day}</span>
+          {hour.openDay ? (
+            hour.open24 ? (
+              <span class="time">Abierto 24 horas</span>
+            ) : hour.open && hour.close ? (
+              <span class="time">{hour.open} - {hour.close}</span>
+            ) : (
+              <span class="time">Abierto sin horario</span>
+            )
+          ) : (
+            <span class="time">Cerrado</span>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+  
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const scheduleWidget = document.querySelector('.schedule-widget') as HTMLElement;
+    const accordionHeader = scheduleWidget.querySelector('.accordion-header') as HTMLElement;
+    const accordionContent = scheduleWidget.querySelector('.accordion-content') as HTMLElement;
+
+    accordionHeader.addEventListener('click', () => {
+      const isExpanded = scheduleWidget.classList.contains('expanded');
+      scheduleWidget.classList.toggle('expanded');
+      scheduleWidget.classList.toggle('collapsed');
+
+      if (isExpanded) {
+        // Colapsar
+        accordionContent.style.height = `${accordionContent.scrollHeight}px`;
+        requestAnimationFrame(() => {
+          accordionContent.style.height = '0';
+        });
+      } else {
+        // Expandir
+        accordionContent.style.height = '0';
+        requestAnimationFrame(() => {
+          accordionContent.style.height = `${accordionContent.scrollHeight}px`;
+        });
+      }
+    });
+
+    // Restablecer el estilo de altura una vez completada la transición
+    accordionContent.addEventListener('transitionend', () => {
+      if (scheduleWidget.classList.contains('collapsed')) {
+        accordionContent.style.height = '';
+      }
+    });
+  });
+
+</script>

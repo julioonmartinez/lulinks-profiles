@@ -1,0 +1,53 @@
+---
+import type { StylesProfile } from "../../../types/styles-profile";
+import CardPost from "../../CardPost/CardPost.astro";
+import LinkWidget from "../LinkWidget/LinkWidget.astro";
+import type { WidgetListConfig } from "../../../types/widget";
+import './SectionWidget.scss'
+interface Props {
+    widget: WidgetListConfig,
+    styles : StylesProfile,
+}
+
+const {widget, styles} = Astro.props as Props;
+---
+<div class="content-title">
+    {!widget.showIcon && (
+        <div
+        class="content-icon"
+        class:list={[
+            styles.buttonShape
+        ]}
+        style={{
+            backgroundColor: styles.buttonColor,
+        color: styles.fontColor,
+        boxShadow: styles.boxShadow,
+        border: styles.buttonBorder ? `1px solid ${styles.buttonColorBorder}` : 'none'
+            
+    }}
+        >
+            <i class={widget.icon}></i>
+        </div>
+     ) }
+     <p class="title-section" >{widget.name}</p>
+</div>
+
+<div class="content-section-container">
+    <div 
+        class="content-section"
+        class:list={[
+            widget.layoutStyle || 'list',
+            styles.adaptativeProfile ? 'desktop' : ''
+        ]}
+        >
+        {widget.widgets.map((wid, index)=>{
+            if(wid.type == 'post'){
+                return <CardPost post={wid} styles={styles} styleCard={wid.cardStyle!} ></CardPost>
+            }
+            if(wid.type=='link'){
+                return <LinkWidget widget={wid} styles={styles} />
+            }
+        } )}
+
+    </div>
+</div>

@@ -1,0 +1,17 @@
+---
+import './PostWidget.scss';
+import type { PostWidget } from '../../../types/widget';
+import type { StylesProfile } from '../../../types/styles-profile';
+import CardPost from '../../CardPost/CardPost.astro';
+
+interface Props {
+    widget: PostWidget,
+    styles:StylesProfile
+}
+
+const {widget, styles} = Astro.props;
+
+---
+
+<CardPost post={widget} styles={styles} styleCard={widget.cardStyle!} />
+

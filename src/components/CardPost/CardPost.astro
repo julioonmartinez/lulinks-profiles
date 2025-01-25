@@ -1,6 +1,6 @@
 ---
-import { StylesProfile } from "../../types/styles-profile"
-import { PostWidget } from "../../types/widget"
+import type { StylesProfile } from "../../types/styles-profile"
+import type { PostWidget } from "../../types/widget"
 import { lightenColor, darkenColor, isColorLight } from '../../utils/colorProcessing';
 import './CardPost.scss'
 interface Props {
@@ -10,10 +10,7 @@ interface Props {
 }
 const defaultImage = 'https://firebasestorage.googleapis.com/v0/b/lulinks-7e45f.firebasestorage.app/o/web%2Fproduct-example.webp?alt=media&token=cbdf2c7d-8631-4a6c-8508-26ba0a4e93ce'; // Ruta a una imagen predeterminada
 
-const handleLinkClick = (e) => {
-  e.preventDefault(); // Para evitar que el enlace redirija.
-  console.log('¡Enlace clickeado!');
-};
+
 const {post, styles, styleCard} = Astro.props as Props;
 ---
 <!-- DISEÑO 1: Moderno y Minimalista -->
@@ -40,14 +37,34 @@ const {post, styles, styleCard} = Astro.props as Props;
       <h3 class="title" style={{ color: styles.fontColor }}>
         {post.title}
       </h3>
-      <h4 class="subtitle" style={{ color: lightenColor(styles.fontColor, 30) }}>
+      <h4 class="subtitle" style={{ color: lightenColor(styles?.fontColor!, 30) }}>
         {post.subtitle}
       </h4>
       <p class="short-description">{post.shortDescription}</p>
       <div class="interaction-bar">
+        {post.linkPost && (
+          <a
+          class:list={[
+              styles.buttonShape || 'rounded'
+            ]}
+          class="cta post-btn"
+            style={{
+              color: styles.fontColor,
+              backgroundColor: styles.buttonColor,
+              border: styles.buttonBorder ? `1px solid ${styles.buttonColorBorder}` : "none",
+            }}
+            
+          >
+            <i class="fa-solid fa-rocket"></i>
+            <p>Leer más</p>
+          </a>
+        )}
         {post.links2.map((btn) => (
           <a
             class="cta"
+            class:list={[
+              styles.buttonShape || 'rounded'
+            ]}
             href={btn.url}
             style={{
               color: btn.activeColorFont
@@ -67,28 +84,14 @@ const {post, styles, styleCard} = Astro.props as Props;
             <p>{btn.name}</p>
           </a>
         ))}
-        {post.linkPost && (
-          <a
-         
-          class="cta post-btn"
-            style={{
-              color: styles.fontColor,
-              backgroundColor: styles.buttonColor,
-              border: styles.buttonBorder ? `1px solid ${styles.buttonColorBorder}` : "none",
-            }}
-            
-          >
-            <i class="fa-solid fa-rocket"></i>
-            <p>Leer más</p>
-          </a>
-        )}
+
       </div>
     </div>
   </div>
 )}
 
 <!-- DISEÑO 2: Elegante y Dinámico -->
-{styleCard === "style2" && (
+{(styleCard === "style2" || styleCard == "style3") &&  (
   <div
     class="card-style-2"
     class:list={[
@@ -163,6 +166,7 @@ const {post, styles, styleCard} = Astro.props as Props;
         {post.linkPost && (
           <a
             class="link post-btn"
+            class:list={[styles.buttonShape]}
             style={{
               color: styles.fontColor,
               backgroundColor: styles.buttonColor,

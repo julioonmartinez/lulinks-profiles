@@ -1,5 +1,5 @@
 ---
-import { StylesProfile } from '../../../types/styles-profile'
+import type { StylesProfile } from '../../../types/styles-profile'
 import CardPost from '../../CardPost/CardPost.astro'
 import type { BlogWidget } from '../../../types/widget'
 import './BlogWidget.scss'
@@ -37,7 +37,7 @@ const { widget, styles } = Astro.props as Props;
   >
     {widget.posts.map((wid, index) => (
       <div class="widget post">
-       <CardPost post={wid} styles={styles} styleCard={wid.cardStyle} />
+       <CardPost post={wid} styles={styles} styleCard={wid.cardStyle!} />
       </div>
     ))}
   </div>

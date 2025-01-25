@@ -3,6 +3,9 @@
 import UserLayout from '../layouts/UserLayout.astro';
 import HeaderProfile from '../components/HeaderProfile.astro';
 import LinkWidget from '../components/widgets/LinkWidget/LinkWidget.astro';
+import BlogWidget from '../components/widgets/BlogWidget/BlogWidget.astro'
+import TimelineWidget from '../components/widgets/TimelineWidget/TimelineWidget.astro';
+import SectionWidget from '../components/widgets/SectionWidget/SectionWidget.astro';
 import { getAllStyleProfiles, getActiveWidgets, getProfileByUsername } from '../utils/api';
 import type { StylesProfile } from '../types/styles-profile';
 import type { WidgetUnion } from '../types/widget';
@@ -28,10 +31,25 @@ export const prerender = false;
   <HeaderProfile profile={profile!} widgets={widgets!} styles={styles!} />
   <div  class:list={[
     'widgets',
-    styles.banner && 'banner',
+    styles?.banner && 'banner',
     styles?.adaptativeProfile ? 'adaptative' : 'no-adaptative',
   ]}  >
-    {widgets.map((widget)=>(widget.type === 'link' && <LinkWidget widget={widget} styles={styles} />))}
+    {widgets.map((widget) => {
+      if (widget.type === 'link') {
+        return <LinkWidget widget={widget} styles={styles} />;
+      }
+      if (widget.type === 'blog') {
+        return <BlogWidget widget={widget} styles={styles} />;
+      }
+      if(widget.type === 'timeline'){
+        return <TimelineWidget widget={widget} styles={styles} />
+      }
+      if(widget.type == 'listWidget' ){
+        return <SectionWidget widget={widget} styles={styles} />
+      }
+      // Puedes manejar otros casos aquí si es necesario
+      return <p>Widget no encontrado</p> ; // Retorna `null` explícitamente si no hay coincidencia
+    })}
   </div>
 </UserLayout>
 

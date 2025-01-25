@@ -2,7 +2,7 @@
 // UserLayout.astro
 import type { StylesProfile } from '../types/styles-profile';
 import type { Profile } from '../types/profile';
-import { WidgetUnion } from '../types/widget';
+import type { WidgetUnion } from '../types/widget';
 import FloatingAd from '../components/FloatingAd.astro'
 interface Props {
   styles: StylesProfile;
@@ -23,6 +23,7 @@ const getBackgroundStyle = (): string => {
   }
   return '#ffffff';
 };
+// styles.fontType
 export const prerender = true;
 
 ---
@@ -37,18 +38,39 @@ export const prerender = true;
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
       rel="stylesheet"
     />
-    <style is:inline >
-        :root {
-   
+    <style is:inline>
+  html, body {
+    height: 100%;
+    margin: 0; 
+    padding: 0;
+    display: flex; 
+    flex-direction: column; 
+    /* padding-bottom: 5rem; */
   }
 
   body {
     
+   
+    
   }
-    </style>
+</style>
   </head>
-  <body class="test-layout" style={`background: ${getBackgroundStyle()}; color: ${styles.fontColor} `}>
-    <slot/>
+  <body class="test-layout" style={`
+            background: ${getBackgroundStyle()};
+            color: ${styles?.fontColor};
+            font-family: ${styles?.fontType};
+            background-attachment: fixed;
+            background-size: cover;
+            
+            
+            `}>
+    <div class="content-slot"
+    style={
+      `backdrop-filter: ${styles?.backgroundBlur ? 'blur('+ (styles?.blursize || 5) + 'px)' :'none' }`
+    }
+    >
+      <slot/>
+    </div>
     <FloatingAd></FloatingAd>
   </body>
 </html>

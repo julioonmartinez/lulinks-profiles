@@ -8,6 +8,8 @@
     height: 100%;
     font-size: 100%; /* Restaura el tamaño de fuente base */
     font-family: sans-serif; /* Establece una fuente predeterminada */
+    overscroll-behavior: none; /* Desactiva el rebote en todo el documento */
+  // overflow: hidden;
   }
   
   img, video {

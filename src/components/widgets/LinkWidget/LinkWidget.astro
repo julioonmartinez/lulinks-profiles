@@ -1,5 +1,5 @@
 ---
-import { StylesProfile } from "../../../types/styles-profile";
+import type { StylesProfile } from "../../../types/styles-profile";
 import type { LinkWidget } from "../../../types/widget";
 import './LinkWidget.scss'
 interface Props {
@@ -16,7 +16,7 @@ const { widget, styles } = Astro.props as Props;
   style={`background-color: ${widget.activeColor ? widget.backgroundColor || styles.fontColor : styles.buttonColorTransparent ? 'transparent' : styles.buttonColor}; 
           color: ${widget.activeColor ? widget.colorFont || styles.buttonColor : styles.fontColor}; 
           box-shadow: ${styles.boxShadow}; 
-          border: ${styles.buttonBorder ? `${styles.borderWidth}px solid ${styles.buttonColorBorder}` : 'none'};`}
+          border: ${styles.buttonBorder ? `${(styles.borderWidth == null ? '1px' : styles.borderWidth  )  || 1 }px solid ${styles.buttonColorBorder}` : 'none'};`}
 >
   <div class="content-first-icon">
     {widget.activeImage ? (

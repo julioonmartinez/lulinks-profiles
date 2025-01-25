@@ -1,7 +1,7 @@
 ---
-import type { Profile } from '../types/profile';
-import type { StylesProfile } from '../types/styles-profile';
-import type { WidgetUnion } from '../types/widget'; // Si tienes este tipo definido
+import type { Profile } from '../../types/profile';
+import type { StylesProfile } from '../../types/styles-profile';
+import type { WidgetUnion } from '../../types/widget'; // Si tienes este tipo definido
 
 import './HeaderProfile.scss';
 
@@ -37,7 +37,7 @@ export const prerender = false; // Configuración dinámica
   class:list={[
     'profile-hero',
     styles?.modelHeader || 'center',
-    styles?.modelHeader === 'line' ? (styles?.positionAvatar || 'left') : '',
+    styles?.positionAvatar || 'center',
     styles?.banner && 'banner',
     styles?.adaptativeProfile ? 'adaptative' : 'no-adaptative',
   ]}
@@ -63,7 +63,7 @@ export const prerender = false; // Configuración dinámica
         style={`background: ${styles?.banner ? getBackgroundStyle() : ''}`}
       >
         <img
-          src={profile?.urlImage || 'https://via.placeholder.com/150'}
+          src={profile?.urlImage || defaultImageProfile }
           class:list={[
             'avatar',
             styles?.avatarShape || 'circle',
@@ -110,10 +110,10 @@ export const prerender = false; // Configuración dinámica
       ]}
       style={`font-size: ${styles?.sizeName}px`}
     >
-      {profile?.name || profile?.userName || 'Nombre no disponible'}
+      {profile?.name || profile?.userName || ''}
     </p>
     <p class="description">
-      {profile?.description || 'Descripción no disponible'}
+      {profile?.description || ''}
     </p>
   </div>
   {profile?.activeSocialMedia &&

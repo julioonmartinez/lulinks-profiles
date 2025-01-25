@@ -76,6 +76,7 @@ export interface Widget {
     type:'listWidget',
     title: string;
     showTitle?: boolean,
+    showIcon?:boolean,
     widgets: WidgetUnion[]; // Donde WidgetConfig representa la configuración individual de cada widget.
     layoutStyle: 'list' | 'responsive' | 'scroll';
     style?: {

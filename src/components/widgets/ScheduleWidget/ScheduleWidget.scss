@@ -1,0 +1,83 @@
+.schedule-widget {
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+    // margin-bottom: 24px;
+    &.pill {
+      border-radius: 50px;
+  
+      &.expanded {
+        border-radius: 8px;
+      }
+    }
+  
+    &.square {
+      border-radius: 0px;
+    }
+  
+    &.rounded {
+      border-radius: 8px;
+    }
+  
+    .accordion-header {
+      display: grid;
+         grid-template-columns: 1fr 2fr 1fr;
+          align-items: center;
+          justify-items: center;
+          
+        cursor: pointer;
+        padding: 0.8rem 1rem;
+        font-size: 1rem;
+        font-weight: bold;
+        min-height: 60px;
+      i {
+        font-size: 1.2rem;
+        transition: transform 0.3s ease;
+      }
+  
+      &:hover {
+       
+      }
+    }
+  
+    .accordion-content {
+      overflow: hidden;
+      transition: height 0.3s ease-in-out;
+      
+      .business-hours {
+        list-style: none;
+        padding: 16px;
+        margin: 0;
+  
+        li {
+          display: flex;
+          justify-content: space-between;
+          padding: 0.5rem 0;
+          border-bottom: 1px solid var(--divider-color, #ddd);
+  
+          &:last-child {
+            border-bottom: none;
+          }
+  
+          .day {
+            font-weight: bold;
+            color: var(--font-color);
+          }
+  
+          .time {
+            font-size: 0.9rem;
+            color: var(--font-secondary-color);
+          }
+        }
+      }
+    }
+  
+    &.expanded i {
+      transform: rotate(180deg);
+    }
+  }
+
+  .schedule-widget.expanded .accordion-content {
+    height: auto; /* Será controlado dinámicamente por JavaScript */
+  }

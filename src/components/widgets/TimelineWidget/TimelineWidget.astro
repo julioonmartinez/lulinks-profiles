@@ -1,0 +1,93 @@
+---
+import { StylesProfile } from "../../../types/styles-profile"
+import type { TimelineWidget } from "../../../types/widget"
+// import { lightenColor, darkenColor, isColorLight } from '../../utils/colorProcessing';
+import './TimelineWidget.scss'
+interface Props {
+    widget: TimelineWidget,
+    styles: StylesProfile,
+}
+const {widget, styles} = Astro.props as Props
+---
+<div class="timeline-container">
+    <div class="content-title" style={`color: ${styles.fontColor};`}>
+      {widget.name && (
+        <div 
+          class:list={[
+            'icon-content',
+            styles.buttonShape
+          ]}
+          style={{
+            backgroundColor: styles.buttonColor,
+            color: styles.fontColor,
+            boxShadow: styles.boxShadow,
+            border: styles.buttonBorder ? `1px solid ${styles.buttonColorBorder}` : "none",
+          }}
+        >
+          <i class={widget.icon}></i>
+        </div>
+      )}
+      <p class="title-section">{widget.name}</p>
+    </div>
+  
+    <div class="timeline">
+      {widget.events.map((event, index) => (
+        <div class="timeline-item" >
+          <div class="marker">
+            <i 
+              class="fa-solid fa-circle"
+              style={{
+                color: widget.settings?.activeColorIcon ? (widget.settings?.colorIcon || styles.buttonColor) : styles.buttonColor
+              }}
+            ></i>
+            <div 
+            class="timeline-conector"
+            style={{
+                backgroundColor : styles.fontColor
+            }}
+            >
+
+            </div>
+          </div>
+          <div 
+            class="timeline-content"
+            style={{
+              backgroundColor: widget.settings?.activeCorlorCards ? (widget.settings?.colorCards || '') : 'transparent'
+            }}
+          >
+            <div class="header-card">
+              <h3
+                class="title-event"
+                style={{
+                  color: widget.settings?.activeColorTitles ? (widget.settings?.colorTitles || styles.fontColor) : styles.fontColor
+                }}
+              >
+                {event.titleEvent}
+              </h3>
+              <h4
+                class="subtitle-event"
+                style={{
+                  color: widget.settings?.activeColorSubtitles ? (widget.settings?.colorSubtitles || styles.fontColor) : styles.fontColor
+                }}
+              >
+                {event.subtitle}
+              </h4>
+              <div class="content-time" style={{ color: widget.settings?.activeColorTimes ? (widget.settings?.colorTime || styles.fontColor) : styles.fontColor }}>
+                <p class="time-event-start">
+                  {`${event.time.monthStart.name} ${event.time.yearStart}`}
+                </p>
+                <p class="time-event-end current">
+                  {event.time.currently ? 'Actualmente' : `${event.time.monthEnd.name || ''} ${event.time.yearEnd || ''}`}
+                </p>
+              </div>
+            </div>
+            {event.description && (
+              <div class="content-card" style={{ color: widget.settings?.activeColorText ? (widget.settings?.colorText || styles.fontColor) : styles.fontColor }}>
+                <p class="text">{event.description}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
