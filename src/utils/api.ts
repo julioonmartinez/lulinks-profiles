@@ -1,5 +1,5 @@
 import type { ProfileResposeBackend } from "../types/profile";
-import type { WidgetUnion } from "../types/widget";
+import type { WidgetResponse, WidgetUnion } from "../types/widget";
 
 const apiBaseUrl = 'https://api-izb6asxh2a-uc.a.run.app/api';
 
@@ -34,7 +34,8 @@ export async function getActiveWidgets(profileId: string):Promise<WidgetUnion[]>
   }
 }
 
-export async function getProfileByUsername(username: string): Promise<ProfileResposeBackend | null> {
+export async function getProfileByUsername(username: string, page?:string): Promise<ProfileResposeBackend | null> {
+  console.log('origin page', page , username , username )
     try {
       const response = await fetch(`${apiBaseUrl}/profiles/by-username?username=${encodeURIComponent(username)}`);
       if (!response.ok) {
@@ -47,3 +48,17 @@ export async function getProfileByUsername(username: string): Promise<ProfileRes
       return null;
     }
   }
+
+export async function getWidgetById(idProfile:string, idWidget:string): Promise<WidgetResponse | undefined>{
+  console.log('idProfile and idWidget', idProfile, idWidget)
+  try {
+    const response = await fetch(`${apiBaseUrl}/profile/${idProfile}/widgets/${idWidget}`);
+    if(!response.ok){
+      throw new Error(`Error al obtener el widget: ${response.statusText}`)
+    }
+    const data: WidgetResponse = await response.json()
+    return data
+  } catch(error){
+    console.error('error ak obtener el widget por id', error)
+  }
+}

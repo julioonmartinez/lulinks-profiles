@@ -42,7 +42,7 @@ const {widget, styles} = Astro.props as Props;
         >
         {widget.widgets.map((wid, index)=>{
             if(wid.type == 'post'){
-                return <CardPost post={wid} styles={styles} styleCard={wid.cardStyle!} ></CardPost>
+                return <CardPost idWidget={widget.id} subWidget={true} post={wid} styles={styles} styleCard={wid.cardStyle!} ></CardPost>
             }
             if(wid.type=='link'){
                 return <LinkWidget widget={wid} styles={styles} />

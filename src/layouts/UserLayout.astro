@@ -4,6 +4,7 @@ import type { StylesProfile } from '../types/styles-profile';
 import type { Profile } from '../types/profile';
 import type { WidgetUnion } from '../types/widget';
 import FloatingAd from '../components/FloatingAd.astro'
+import '../styles/global.scss';
 interface Props {
   styles: StylesProfile;
   profile: Profile;
@@ -38,39 +39,57 @@ export const prerender = true;
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
       rel="stylesheet"
     />
-    <style is:inline>
-  html, body {
-    height: 100%;
-    margin: 0; 
-    padding: 0;
-    display: flex; 
-    flex-direction: column; 
-    /* padding-bottom: 5rem; */
-  }
-
-  body {
-    
-   
-    
-  }
-</style>
   </head>
-  <body class="test-layout" style={`
-            background: ${getBackgroundStyle()};
-            color: ${styles?.fontColor};
-            font-family: ${styles?.fontType};
-            background-attachment: fixed;
-            background-size: cover;
-            
-            
-            `}>
-    <div class="content-slot"
-    style={
-      `backdrop-filter: ${styles?.backgroundBlur ? 'blur('+ (styles?.blursize || 5) + 'px)' :'none' }`
-    }
-    >
-      <slot/>
-    </div>
+  <body  >
+            <div 
+              class="content-router"
+              style={`
+                background: ${getBackgroundStyle()};
+                color: ${styles?.fontColor};
+                font-family: ${styles?.fontType};
+                
+                
+                `}  
+              >
+              <div class="content-slot"
+              style={
+                `backdrop-filter: ${styles?.backgroundBlur ? 'blur('+ (styles?.blursize || 5) + 'px)' :'none' }; background-attachment: fixed;
+               
+                
+                `
+                
+                }
+              >
+                <slot/>
+              </div>
+            </div>
+
     <FloatingAd></FloatingAd>
   </body>
 </html>
+<style>
+  .content-router {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 1; 
+  }
+
+  
+  .content-slot {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2; 
+    overflow-y: auto; 
+    overflow-x: hidden; 
+  }
+
+ 
+</style>

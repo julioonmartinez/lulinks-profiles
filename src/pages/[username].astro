@@ -11,14 +11,14 @@ import PostWidget from '../components/widgets/PostWidget/PostWidget.astro';
 import { getAllStyleProfiles, getActiveWidgets, getProfileByUsername } from '../utils/api';
 import type { StylesProfile } from '../types/styles-profile';
 import type { WidgetUnion } from '../types/widget';
-import '../styles/global.scss';
+
 import './username.scss'
 import type { Profile } from '../types/profile';
 
 
 const { username } = Astro.params;
 
-const profileResponse = await getProfileByUsername(username!);
+const profileResponse = await getProfileByUsername(username!, 'username');
 const profile: Profile | null = profileResponse?.data || null;
 const styles: StylesProfile | null = await getAllStyleProfiles(profile?.id!);
 const widgets: WidgetUnion[] = await getActiveWidgets(profile?.id!);

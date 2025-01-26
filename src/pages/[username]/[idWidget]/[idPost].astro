@@ -1,0 +1,175 @@
+---
+import { undefined } from 'astro:schema';
+import UserLayout from '../../../layouts/UserLayout.astro'
+import type {Profile, ProfileResponse, ProfileResposeBackend} from '../../../types/profile';
+import type {StylesProfile} from '../../../types/styles-profile';
+import type {WidgetUnion, WidgetResponse, PostWidget, BlogWidget , WidgetListConfig} from '../../../types/widget';
+import { getAllStyleProfiles, getWidgetById, getProfileByUsername } from '../../../utils/api';
+import { isColorLight, lightenColor, darkenColor } from '../../../utils/color-utils'
+import './idPost.scss'
+
+
+
+const { username, idWidget, idPost } = Astro.params;
+//verificamos si es un widget de raiz o es un subwidget
+
+
+let profileResponse : ProfileResposeBackend | null   = await getProfileByUsername(username!, 'pageIdPOst');
+let profile: Profile | null = profileResponse?.data || null;
+let styles: StylesProfile | null = await getAllStyleProfiles(profile?.id!);
+let widgetResponse : WidgetResponse | null | undefined  = null;
+let safeContent : any
+let widget : WidgetUnion | null = null;
+if (idPost === 'post') {
+    widgetResponse = await getWidgetById(profile?.id!, idWidget!);
+    if(widgetResponse?.widget.type == 'post'){
+  widget = widgetResponse.widget as PostWidget
+  
+ safeContent = widget?.content
+  .replace(/&nbsp;/g, ' ')
+  .replace(/<img /g, '<img style="max-width:100%;height:auto;display:block;margin:0 auto;" ');
+
+}
+}else{
+  widgetResponse = await getWidgetById(profile?.id!, idWidget!)
+  if(widgetResponse?.widget.type == 'blog' ){
+    const widgetRef = widgetResponse.widget as BlogWidget;
+    const postRef = widgetRef.posts.find(post => post.id === idPost);
+    if(postRef){
+      widget = postRef as PostWidget;
+      safeContent = widget.content
+      .replace(/&nbsp;/g, ' ')
+      .replace(/<img /g, '<img style="max-width:100%;height:auto;display:block;margin:0 auto;" ');
+    } 
+  }else if( widgetResponse?.widget.type === 'listWidget' ){
+    const widgetRef = widgetResponse.widget as WidgetListConfig ;
+    const postRef = widgetRef.widgets.find(wid => wid.id === idPost);
+    if(postRef){
+      widget = postRef as PostWidget
+      safeContent = widget.content
+      .replace(/&nbsp;/g, ' ')
+      .replace(/<img /g, '<img style="max-width:100%;height:auto;display:block;margin:0 auto;" ');
+    }
+
+  }
+
+}
+export function adjustColorBasedOnBackground(hex: string): string {
+  const isLight = isColorLight(hex);
+  
+  // Si es un color claro, hacemos un lighten al 100% para que sea blanco
+  if (isLight) {
+    return lightenColor(hex, 100);
+  }
+
+  // Si es un color oscuro, hacemos un lighten al 20%
+  return lightenColor(hex, 20);
+}
+
+// Ajustar el color del texto según el fondo
+export function adjustTextColor(hex: string, percentDark?: number, percentLight?: number): string {
+  const isLight = isColorLight(hex);
+
+  if (isLight) {
+    // Si el color es claro, oscurecemos el texto
+    return darkenColor('#2b2b2b', percentDark ?? 80);
+  }
+
+  // Si el color es oscuro, aclaramos el texto
+  return lightenColor(hex, percentLight ?? 50);
+}
+
+
+
+---
+<UserLayout profile={profile!} styles={styles!} >
+  {widget?.type === 'post' && (
+    <div class="content-page">
+  <article 
+    class="blog-post"
+    style={{
+      backgroundColor: adjustColorBasedOnBackground(styles?.backgroundColor || '#ffffff'),
+      color: adjustTextColor(adjustColorBasedOnBackground(styles?.backgroundColor || '#ffffff'))
+    }}
+  >
+    {widget.coverImage && widget.coverImage !== '' ? (
+      <div class="header-image">
+        <img src={widget.coverImage} alt="Blog post header image" />
+
+        <div 
+          class={`share-button ${styles?.buttonShape || 'rounded'}`}
+        >
+          <button >
+            <i class="fa-solid fa-share"></i>
+          </button>
+        </div>
+      </div>
+    ) : (
+      <div class="shared-btn-no-image">
+        <button class="btn-share-no-image" >
+          <i class="fa-solid fa-share"></i>
+        </button>
+      </div>
+    )}
+
+    <div class="content">
+      <div class="post-header">
+        <h1
+          style={{
+            color: adjustTextColor(adjustColorBasedOnBackground(styles?.backgroundColor || '#ffffff'), 90, 100)
+          }}
+        >
+          {widget.title}
+        </h1>
+        <div class="post-meta">
+          <span><i class="fa-solid fa-calendar-days"></i>{new Date( widget.dateCreated!).toLocaleDateString('es-ES')}</span>
+          <span><i class="fa-solid fa-clock"></i>{(widget.readTime ?? 5) + ' mins'}</span>
+          <span><i class="fa-solid fa-user"></i>{widget.authorPost ?? (profile?.name ?? profile?.userName)}</span>
+        </div>
+        <div class="post-tags">
+          {widget.tags.map(tag => (
+            <button
+              style={{
+                backgroundColor: styles?.buttonColor,
+                color: styles?.fontColor
+              }}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+        <div class="post-links">
+          {widget.links2.map(link => (
+            <a 
+              href={link.url} 
+              target="_blank"
+              class="cta"
+              style={{
+                color: link.activeColorFont 
+                  ? (link.colorFont || styles?.fontColor || '') 
+                  : (styles?.fontColor || '#2b2b2b'),
+                backgroundColor: link.activeBackgroundColor 
+                  ? (link.backgroundColor || styles?.buttonColor || '') 
+                  : (styles?.buttonColor || '#ffffff'),
+                border: link.activeBorderColor 
+                  ? `1px solid ${link.borderColor || styles?.buttonColorBorder || ''}` 
+                  : `1px solid ${styles?.buttonColorBorder || '#2b2b2b'}`
+              }}
+            >
+              <i class={link.icon}></i>
+              {link.name}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div 
+        class="post-content" 
+        set:html={safeContent}
+      ></div>
+    </div>
+  </article>
+</div>
+  )}
+  
+</UserLayout>
