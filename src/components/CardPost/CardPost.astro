@@ -1,4 +1,5 @@
 ---
+
 import type { StylesProfile } from "../../types/styles-profile"
 import type { PostWidget } from "../../types/widget"
 import { lightenColor, darkenColor, isColorLight } from '../../utils/colorProcessing';
@@ -11,10 +12,12 @@ interface Props {
     idWidget?:string
 }
 
-const { username } = Astro.params
+let { username } = Astro.params
 const defaultImage = 'https://firebasestorage.googleapis.com/v0/b/lulinks-7e45f.firebasestorage.app/o/web%2Fproduct-example.webp?alt=media&token=cbdf2c7d-8631-4a6c-8508-26ba0a4e93ce'; // Ruta a una imagen predeterminada
 
-
+if(username === undefined){
+  username = 'homes'
+}
 const {post, styles, styleCard, subWidget , idWidget,  } = Astro.props as Props;
 console.log(post)
 ---
@@ -49,7 +52,7 @@ console.log(post)
       <div class="interaction-bar">
         {post.linkPost && (
           <a
-          href={ subWidget ? `${username}/${idWidget}/${post.id}` : `${username}/${post.id}/post` }
+          href={   subWidget ? `${username}/${idWidget}/${post.id}` : `${username}/${post.id}/post` }
           class:list={[
               styles.buttonShape || 'rounded'
             ]}

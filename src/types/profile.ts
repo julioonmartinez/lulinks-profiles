@@ -27,6 +27,7 @@ export interface Profile {
     emailContact?:string,
     activeContact?:boolean,
     statsId?: string;
+    isPremium?:boolean;
   }
   
   export interface ProfileResponse {

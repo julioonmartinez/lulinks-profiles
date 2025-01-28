@@ -12,7 +12,7 @@ interface Props {
 const {widget, styles} = Astro.props as Props;
 ---
 <div class="content-title">
-    {!widget.showIcon && (
+    {widget.showIcon && (
         <div
         class="content-icon"
         class:list={[

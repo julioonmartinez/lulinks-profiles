@@ -6,5 +6,7 @@ export default defineConfig({
   server: {
       port: 4200 // Cambia el puerto aquí
     },
-    adapter: vercel(),
+    adapter: vercel({
+      isr:true,
+    }),
 });
