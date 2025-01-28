@@ -14,7 +14,6 @@ const $$username = createComponent(async ($$result, $$props, $$slots) => {
   const profile = profileResponse?.data || null;
   const styles = await getAllStyleProfiles(profile?.id);
   const widgets = await getActiveWidgets(profile?.id);
-  Astro2.props.prerender = profile?.isPremium || false;
   return renderTemplate`${!profile ? renderTemplate`${maybeRenderHead()}<div class="error"><p>Perfil no encontrado</p></div>` : renderTemplate`${renderComponent($$result, "UserLayout", $$UserLayout, { "profile": profile, "styles": styles }, { "default": ($$result2) => renderTemplate`<div${addAttribute([
     "profile-container",
     styles?.adaptativeProfile ? "adaptative-profile" : "no-adaptative"

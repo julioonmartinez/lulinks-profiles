@@ -11,25 +11,31 @@ import PostWidget from '../components/widgets/PostWidget/PostWidget.astro';
 import { getAllStyleProfiles, getActiveWidgets, getProfileByUsername } from '../utils/api';
 import type { StylesProfile } from '../types/styles-profile';
 import type { WidgetUnion } from '../types/widget';
-
-import './username.scss'
-import type { Profile } from '../types/profile';
-
-
+import '../styles/username.scss'
+import type { Profile, ProfileResposeBackend } from '../types/profile';
+import ProfileNotFound from '../components/ProfileNotFound/ProfileNotFound.astro';
 const { username } = Astro.params;
 
-const profileResponse = await getProfileByUsername(username!, 'username');
+const profileResponse : ProfileResposeBackend | null = await getProfileByUsername(username!, 'username');
 const profile: Profile | null = profileResponse?.data || null;
-const styles: StylesProfile | null = await getAllStyleProfiles(profile?.id!);
-const widgets: WidgetUnion[] = await getActiveWidgets(profile?.id!);
-//prerender
-Astro.props.prerender = profile?.isPremium || false;
+let styles: null | StylesProfile = null;
+  let widgets: null | WidgetUnion[] = null;
+// Si no se encuentra el perfil, no seguimos cargando estilos ni widgets
+if (!profile) {
+  // Mostrar el componente ProfileNotFound en lugar del diseño principal
+   styles = null;
+   widgets= null;
+} else {
+  // Si el perfil existe, cargamos los estilos y widgets
+  styles= await getAllStyleProfiles(profile.id!);
+  widgets = await getActiveWidgets(profile.id!);
+}
+// const styles: StylesProfile | null = await getAllStyleProfiles(profile?.id!);
+// const widgets: WidgetUnion[] = await getActiveWidgets(profile?.id!);
 ---
-
 {!profile ? (
-  <div class="error" >
-    <p>Perfil no encontrado</p>
-  </div>
+  // Si el perfil no existe, renderiza el componente ProfileNotFound
+  <ProfileNotFound username={username!} />
 ) : (
 <UserLayout profile={profile!} styles={styles!}>
   <div class:list={[
@@ -45,7 +51,7 @@ Astro.props.prerender = profile?.isPremium || false;
     styles?.banner && 'banner',
     styles?.adaptativeProfile ? 'adaptative' : 'no-adaptative',
   ]}  >
-    {widgets.map((widget) => {
+    {(widgets ?? [] ).map((widget) => {
       if (widget.type === 'link') {
         return <LinkWidget widget={widget} styles={styles!} />;
       }
@@ -70,9 +76,4 @@ Astro.props.prerender = profile?.isPremium || false;
   </div>
   </div>
 </UserLayout>
-
-)
-
-
-}
-
+)}

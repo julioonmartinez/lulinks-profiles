@@ -1,1 +1,83 @@
-<h1>Error 404 :p</h1>
+---
+// src/pages/404.astro
+// import BaseLayout from '../layouts/BaseLayout.astro'; // Importa tu layout base (opcional)
+---
+<html lang="es">
+  <head>
+    <title>Página no encontrada</title>
+    <meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body  >
+          
+  <main class="container">
+    <div class="content">
+      <h1>404</h1>
+      <p class="subtitle">¡Ups! Parece que te has perdido.</p>
+      <p class="description">
+        La página que estás buscando no existe. ¿Por qué no regresas a la página de inicio?
+      </p>
+      <a href="/" class="button">Volver al inicio</a>
+    </div>
+  </main>
+  </body>
+</html>
+
+
+
+<style>
+  /* Estilos para la página 404 */
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+
+  .content {
+    max-width: 600px;
+    padding: 2rem;
+  }
+
+  h1 {
+    font-size: 6rem;
+    margin: 0;
+    color: #ff6b6b;
+  }
+
+  .subtitle {
+    font-size: 1.5rem;
+    margin: 1rem 0;
+    color: #555;
+  }
+
+  .description {
+    font-size: 1rem;
+    margin: 1rem 0;
+    color: #777;
+  }
+
+  .button {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #ff6b6b;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .button:hover {
+    background-color: #ff4c4c;
+  }
+</style>

@@ -12,7 +12,7 @@ import { getAllStyleProfiles, getActiveWidgets, getProfileByUsername } from '../
 import type { StylesProfile } from '../types/styles-profile';
 import type { WidgetUnion } from '../types/widget';
 
-import './index.scss'
+import '../styles/index.scss'
 import type { Profile } from '../types/profile';
 
 const profileResponse = await getProfileByUsername('homes');
@@ -23,7 +23,7 @@ const widgets: WidgetUnion[] = await getActiveWidgets(profile?.id!);
 console.log(styles);
 console.log(profile)
 console.log(widgets)
-export const prerender = false;
+
 ---
 
 <UserLayout profile={profile!} styles={styles!}>

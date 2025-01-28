@@ -22,8 +22,7 @@ const profileResponse = await getProfileByUsername(username!, 'username');
 const profile: Profile | null = profileResponse?.data || null;
 const styles: StylesProfile | null = await getAllStyleProfiles(profile?.id!);
 const widgets: WidgetUnion[] = await getActiveWidgets(profile?.id!);
-//prerender
-Astro.props.prerender = profile?.isPremium || false;
+
 ---
 
 {!profile ? (

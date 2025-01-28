@@ -34,20 +34,28 @@ export async function getActiveWidgets(profileId: string):Promise<WidgetUnion[]>
   }
 }
 
-export async function getProfileByUsername(username: string, page?:string): Promise<ProfileResposeBackend | null> {
-  console.log('origin page', page , username , username )
-    try {
-      const response = await fetch(`${apiBaseUrl}/profiles/by-username?username=${encodeURIComponent(username)}`);
-      if (!response.ok) {
-        throw new Error(`Error al obtener el perfil: ${response.statusText}`);
-      }
-      const data: ProfileResposeBackend = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error al obtener el perfil por nombre de usuario:', error);
-      return null;
+export async function getProfileByUsername(username: string, page?: string): Promise<ProfileResposeBackend | null> {
+  console.log('origin page', page, username);
+  try {
+    const response = await fetch(`${apiBaseUrl}/profiles/by-username?username=${encodeURIComponent(username)}`);
+    
+    if (response.status === 404) {
+      console.warn(`Perfil no encontrado para el username: ${username}`);
+      return null; // Retorna null si no se encuentra el perfil
     }
+    
+    if (!response.ok) {
+      throw new Error(`Error al obtener el perfil: ${response.statusText}`);
+    }
+    
+    const data: ProfileResposeBackend = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error al obtener el perfil por nombre de usuario:', error);
+    return null;
   }
+}
+
 
 export async function getWidgetById(idProfile:string, idWidget:string): Promise<WidgetResponse | undefined>{
   console.log('idProfile and idWidget', idProfile, idWidget)
