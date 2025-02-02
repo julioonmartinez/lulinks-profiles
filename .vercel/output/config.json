@@ -21,19 +21,19 @@
 		},
 		{
 			"src": "^\\/404\\/?$",
-			"dest": "/_isr?x_astro_path=$0"
+			"dest": "_render"
 		},
 		{
 			"src": "^\\/([^/]+?)\\/([^/]+?)\\/([^/]+?)\\/?$",
-			"dest": "/_isr?x_astro_path=$0"
+			"dest": "_render"
 		},
 		{
 			"src": "^\\/([^/]+?)\\/?$",
-			"dest": "/_isr?x_astro_path=$0"
+			"dest": "_render"
 		},
 		{
 			"src": "^\\/$",
-			"dest": "/_isr?x_astro_path=$0"
+			"dest": "_render"
 		},
 		{
 			"src": "/.*",

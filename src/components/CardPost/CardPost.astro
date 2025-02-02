@@ -2,7 +2,7 @@
 
 import type { StylesProfile } from "../../types/styles-profile"
 import type { PostWidget } from "../../types/widget"
-import { lightenColor, darkenColor, isColorLight } from '../../utils/colorProcessing';
+import { lightenColor, darkenColor, isColorLight, convertHexToRgba } from '../../utils/colorProcessing';
 import './CardPost.scss'
 interface Props {
     post: PostWidget,
@@ -19,7 +19,7 @@ if(username === undefined){
   username = 'homes'
 }
 const {post, styles, styleCard, subWidget , idWidget,  } = Astro.props as Props;
-console.log(post)
+
 ---
 <!-- DISEÑO 1: Moderno y Minimalista -->
 {(styleCard === "style1" || styleCard === undefined) && (
@@ -29,10 +29,10 @@ console.log(post)
       styles.buttonShape,
     ]}
     style={{
-      backgroundColor: styles.buttonColor,
+      backgroundColor: styles.buttonColorTransparent ? convertHexToRgba(styles.buttonColor || '#2b2b2b' , styles.buttonOpacity || 20) : styles.buttonColor,
       color: styles.fontColor,
       boxShadow: styles.boxShadow,
-      border: styles.buttonBorder ? `1px solid ${styles.buttonColorBorder}` : "none",
+      border: styles.buttonBorder ? `${(styles.borderWidth || 1)}px solid ${styles.buttonColorBorder}` : "none",
     }}
   >
     <img 
@@ -100,17 +100,17 @@ console.log(post)
 )}
 
 <!-- DISEÑO 2: Elegante y Dinámico -->
-{(styleCard === "style2" || styleCard == "style3") &&  (
+{styleCard === "style2"  &&  (
   <div
     class="card-style-2"
     class:list={[
       styles.buttonShape,
     ]}
     style={{
-      backgroundColor: styles.buttonColor,
+      backgroundColor: styles.buttonColorTransparent ? convertHexToRgba(styles.buttonColor || '#2b2b2b' , styles.buttonOpacity || 20) : styles.buttonColor,
       color: styles.fontColor,
       boxShadow: styles.boxShadow,
-      border: styles.buttonBorder ? `1px solid ${styles.buttonColorBorder}` : "none",
+      border: styles.buttonBorder ? `${(styles.borderWidth || 1)}px solid ${styles.buttonColorBorder}` : "none",
     }}
   >
     <div class="content-image">
@@ -178,16 +178,43 @@ console.log(post)
             class="link post-btn"
             class:list={[styles.buttonShape]}
             style={{
-              color: styles.fontColor,
-              backgroundColor: styles.buttonColor,
+              color: styles.buttonColorTransparent ? styles.buttonColor : styles.fontColor ,
+              backgroundColor: styles.buttonColorTransparent ? 'transparent' : styles.buttonColor,
               border: styles.buttonBorder ? `1px solid ${styles.buttonColorBorder}` : "none",
             }}
           >
             <i class="fa-solid fa-rocket"></i>
-            <p>Leer más</p>
+            <p  >Leer más</p>
           </a>
         )}
       </div>
     </div>
   </div>
+)}
+{styleCard === "style3" && (
+  <div class="card-style-3">
+  <div class={`cover-bg ${styles.buttonShape || ''}`  } style={{ backgroundImage : `url(${post.coverImage || defaultImage})` }}>
+    <div class={`overlay ${styles.buttonShape || ''}`}>
+      <div class="content">
+        <h3 class="title">{post.title}</h3>
+        {post.subtitle && <h4 class="subtitle">{post.subtitle}</h4>}
+        <p class="description">{post.shortDescription}</p>
+
+        {post.links2.length > 0 && (
+          <div class="links">
+            {post.links2.map((link) => (
+              <a href={link.url} target="_blank" class={`link ${styles.buttonShape || ''}`}>
+                {link.icon && <i class={link.icon}></i>}
+                {link.name}
+              </a>
+            ))}
+            <a  href={ subWidget ? `${username}/${idWidget}/${post.id}` : `${username}/${post.id}/post` } class={`view-button ${styles.buttonShape || ''}`} >
+              Ver detalle
+            </a>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</div>
 )}

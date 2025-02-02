@@ -18,13 +18,13 @@ const {widget, styles} = Astro.props as Props;
         class:list={[
             styles.buttonShape
         ]}
-        style={{
-            backgroundColor: styles.buttonColor,
-        color: styles.fontColor,
-        boxShadow: styles.boxShadow,
-        border: styles.buttonBorder ? `1px solid ${styles.buttonColorBorder}` : 'none'
-            
-    }}
+        style={`
+              color: ${ styles.isActiveIconColor ? (styles.iconColor || styles?.fontColor ) : styles?.fontColor };
+              background-color: ${
+                styles?.isActiveBackgroundIconColor
+                  ? (styles.iconBackgroundColor || styles?.buttonColor )
+                  : 'transparent'
+              };`}
         >
             <i class={widget.icon}></i>
         </div>
@@ -32,9 +32,9 @@ const {widget, styles} = Astro.props as Props;
      <p class="title-section" >{widget.name}</p>
 </div>
 
-<div class="content-section-container">
+
     <div 
-        class="content-section"
+        class="content-section-widget-section"
         class:list={[
             widget.layoutStyle || 'list',
             styles.adaptativeProfile ? 'desktop' : ''
@@ -42,7 +42,9 @@ const {widget, styles} = Astro.props as Props;
         >
         {widget.widgets.map((wid, index)=>{
             if(wid.type == 'post'){
-                return <CardPost idWidget={widget.id} subWidget={true} post={wid} styles={styles} styleCard={wid.cardStyle!} ></CardPost>
+                return <div class="widget post">
+                    <CardPost idWidget={widget.id} subWidget={true} post={wid} styles={styles} styleCard={wid.cardStyle!} ></CardPost>
+                </div>
             }
             if(wid.type=='link'){
                 return <LinkWidget widget={wid} styles={styles} />
@@ -50,4 +52,3 @@ const {widget, styles} = Astro.props as Props;
         } )}
 
     </div>
-</div>

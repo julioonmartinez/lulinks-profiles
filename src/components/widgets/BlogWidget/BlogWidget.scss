@@ -1,42 +1,5 @@
-.content-section-container {
-    position: relative;
-  
-    .nav-btn {
-      display: none;
-  
-      @media (min-width: 600px) {
-        display: flex;
-        z-index: 10;
-        position: absolute;
-        color: white;
-        border-radius: 50%;
-        padding: 8px;
-        width: 36px;
-        height: 36px;
-        justify-content: center;
-        align-items: center;
-        font-size: 1.2rem;
-        cursor: pointer;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        transform: translate(0, -50%); /* Ajustar solo en el eje Y para centrar verticalmente */
-        border: none;
-        &.left {
-          left: 8px; /* Separación del borde izquierdo */
-          top: 50%; /* Centrado vertical */
-        }
-  
-        &.right {
-          right: 8px; /* Separación del borde derecho */
-          top: 50%; /* Centrado vertical */
-        }
-      }
-    }
-  }
-  
     
     .content-section {
-      
-      // position: relative;
       &.list {
         display: grid;
         // justify-content: center;
@@ -81,37 +44,22 @@
     
       &.responsive {
         display: flex;
-        flex-wrap: wrap;
-        gap: 24px;
-        // grid-template-columns: (auto-fit,minmax(1fr, 400px));
-        // gap: 1rem;
-        .widget{
-          flex: 0 0 100%;
-          width: fit-content;
+        gap: 1rem;
+        justify-content: center;
+        flex-direction: column;
+        width: 100%;
+        @media (min-width:48rem) {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          justify-content: space-between;
+        }
+        @media (min-width:64rem) {
+          display: grid;
+          grid-template-columns:  1fr 1fr 1fr;
+          gap: 1rem;
+          justify-content: space-between;
           
         }
-        @media (min-width:800px) {
-          // background-color: red;
-          // justify-content: ;
-          // gap: 0px 12px;
-          .widget.link{
-  
-            // display: flex;
-            // flex-wrap: wrap;
-            // max-width: 120px;
-            // width: fit-content;
-            flex: none;
-            // padding-left: 32px;
-            // padding-right: 32px;
-            // margin: 0;
-            
-          }
-          .widget.post{
-            margin-bottom: 24px;
-          }
-        }
-        
-  
       }
       
     }

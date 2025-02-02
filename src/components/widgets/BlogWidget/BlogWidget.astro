@@ -15,12 +15,13 @@ const { widget, styles } = Astro.props as Props;
   {widget.showIcon && (
     <div
       class={`content-icon ${styles.buttonShape}`}
-      style={{
-        backgroundColor: styles.buttonColor,
-        color: styles.fontColor,
-        boxShadow: styles.boxShadow,
-        border: styles.buttonBorder ? `1px solid ${styles.buttonColorBorder}` : 'none'
-      }}
+      style={`
+              color: ${ styles.isActiveIconColor ? (styles.iconColor || styles?.fontColor ) : styles?.fontColor };
+              background-color: ${
+                styles?.isActiveBackgroundIconColor
+                  ? (styles.iconBackgroundColor || styles?.buttonColor )
+                  : 'transparent'
+              };`}
     >
       <i class={widget.icon}></i>
     </div>

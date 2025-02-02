@@ -103,15 +103,15 @@ export const prerender = false; // Configuración dinámica
     </div>
   </div>
   <div class="content-info-profile">
-    <p
+    <h1
       class:list={[
         'name-profile',
         styles?.sizeName ? '' : 'name-profile-undefined',
       ]}
-      style={`font-size: ${styles?.sizeName}px`}
+      style={`font-size: ${styles?.sizeName}px; color: ${styles?.colorTitle || styles.fontColor}`}
     >
       {profile?.name || profile?.userName || ''}
-    </p>
+      </h1>
     <p class="description">
       {profile?.description || ''}
     </p>
@@ -127,18 +127,18 @@ export const prerender = false; // Configuración dinámica
               styles?.buttonShape || '',
               profile?.typeButtonSocialMedia || 'icon',
             ]}
-            style={`background-color: ${styles?.buttonColor};
-              color: ${styles?.fontColor};
-              border: ${
-                styles?.buttonBorder
-                  ? `1px solid ${styles?.buttonColorBorder}`
-                  : 'none'
-              }`}
+            style={`
+              color: ${ styles.isActiveIconColor ? (styles.iconColor || styles?.fontColor ) : styles?.fontColor };
+              background-color: ${
+                styles?.isActiveBackgroundIconColor
+                  ? (styles.iconBackgroundColor || 'transparent' )
+                  : styles.buttonColor
+              };`}
             href="#contact"
           >
             <i class="fa-solid fa-envelope"></i>
             {profile?.typeButtonSocialMedia === 'large' && (
-              <p class="name-btn">Contacto</p>
+              <p class="name-btn">{profile.emailContact}</p>
             )}
           </a>
         )}
@@ -149,13 +149,13 @@ export const prerender = false; // Configuración dinámica
               styles?.buttonShape || '',
               profile?.typeButtonSocialMedia || 'icon',
             ]}
-            style={`background-color: ${styles?.buttonColor};
-              color: ${styles?.fontColor};
-              border: ${
-                styles?.buttonBorder
-                  ? `1px solid ${styles?.buttonColorBorder}`
-                  : 'none'
-              }`}
+            style={`
+              color: ${ styles.isActiveIconColor ? (styles.iconColor || styles?.fontColor ) : styles?.fontColor };
+              background-color: ${
+                styles?.isActiveBackgroundIconColor
+                  ? (styles.iconBackgroundColor || 'transparent' )
+                  : styles.buttonColor
+              };`}
             href={socialMedia.url}
           >
             <i class={socialMedia.icon}></i>

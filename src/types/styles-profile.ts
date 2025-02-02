@@ -19,6 +19,7 @@ export interface StylesProfile {
     backgroundGradient?: string; // Gradiente de fondo (e.g., 'linear-gradient(to right, #fff, #000)')
     backgroundBlur?: boolean; // Activar o desactivar desenfoque de fondo
     blursize:number,
+    colorTitle?:string
     // Tipografía
     fontType?: string; // Tipo de fuente (e.g., 'Poppins', 'Montserrat')
     fontColor?: string; // Color del texto principal
@@ -35,7 +36,7 @@ export interface StylesProfile {
     buttonHoverColor?: string; // Color del botón al pasar el cursor
     buttonHoverTextColor?: string; // Color del texto del botón en hover
     buttonAnimation?: 'bounce' | 'pulse' | 'none'; // Animación del botón al hacer hover
-  
+    buttonOpacity?: number,
     // Animaciones y efectos
     linkHoverAnimation?: 'underline' | 'scale' | 'none'; // Animación al pasar el cursor sobre los enlaces
     pageLoadAnimation?: 'fade-in' | 'slide-in' | 'none'; // Animación al cargar la página
@@ -49,5 +50,11 @@ export interface StylesProfile {
     avatarShape?: 'circle' | 'square' | 'rounded' | 'none'; // Forma del avatar
     useParallaxEffect?: boolean; // Activar o desactivar efecto parallax en el fondo
     animationTiming?: string; // Velocidad de las animaciones (e.g., 'ease-in', 'ease-out')
+
+        //icon
+        isActiveIconColor?:boolean;
+        iconColor?:string;
+        isActiveBackgroundIconColor?:boolean;
+        iconBackgroundColor?:string;
   }
   

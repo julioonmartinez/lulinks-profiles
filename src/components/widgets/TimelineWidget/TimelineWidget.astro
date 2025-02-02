@@ -1,5 +1,5 @@
 ---
-import { StylesProfile } from "../../../types/styles-profile"
+import type { StylesProfile } from "../../../types/styles-profile"
 import type { TimelineWidget } from "../../../types/widget"
 // import { lightenColor, darkenColor, isColorLight } from '../../utils/colorProcessing';
 import './TimelineWidget.scss'
@@ -17,12 +17,13 @@ const {widget, styles} = Astro.props as Props
             'icon-content',
             styles.buttonShape
           ]}
-          style={{
-            backgroundColor: styles.buttonColor,
-            color: styles.fontColor,
-            boxShadow: styles.boxShadow,
-            border: styles.buttonBorder ? `1px solid ${styles.buttonColorBorder}` : "none",
-          }}
+          style={`
+              color: ${ styles.isActiveIconColor ? (styles.iconColor || styles?.fontColor ) : styles?.fontColor };
+              background-color: ${
+                styles?.isActiveBackgroundIconColor
+                  ? (styles.iconBackgroundColor || styles?.buttonColor )
+                  : 'transparent'
+              };`}
         >
           <i class={widget.icon}></i>
         </div>
@@ -74,7 +75,7 @@ const {widget, styles} = Astro.props as Props
               </h4>
               <div class="content-time" style={{ color: widget.settings?.activeColorTimes ? (widget.settings?.colorTime || styles.fontColor) : styles.fontColor }}>
                 <p class="time-event-start">
-                  {`${event.time.monthStart.name} ${event.time.yearStart}`}
+                  {`${event.time.monthStart?.name} ${event.time.yearStart}`}
                 </p>
                 <p class="time-event-end current">
                   {event.time.currently ? 'Actualmente' : `${event.time.monthEnd.name || ''} ${event.time.yearEnd || ''}`}

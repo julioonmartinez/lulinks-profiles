@@ -11,26 +11,44 @@ import PostWidget from '../components/widgets/PostWidget/PostWidget.astro';
 import { getAllStyleProfiles, getActiveWidgets, getProfileByUsername } from '../utils/api';
 import type { StylesProfile } from '../types/styles-profile';
 import type { WidgetUnion } from '../types/widget';
-
-import './username.scss'
-import type { Profile } from '../types/profile';
-
-
+import '../styles/username.scss'
+import type { Profile, ProfileResposeBackend } from '../types/profile';
+import ProfileNotFound from '../components/ProfileNotFound/ProfileNotFound.astro';
 const { username } = Astro.params;
 
-const profileResponse = await getProfileByUsername(username!, 'username');
+const profileResponse : ProfileResposeBackend | null = await getProfileByUsername(username!, 'username');
 const profile: Profile | null = profileResponse?.data || null;
-const styles: StylesProfile | null = await getAllStyleProfiles(profile?.id!);
-const widgets: WidgetUnion[] = await getActiveWidgets(profile?.id!);
-
+let styles: null | StylesProfile = null;
+  let widgets: null | WidgetUnion[] = null;
+// Si no se encuentra el perfil, no seguimos cargando estilos ni widgets
+if (!profile) {
+  // Mostrar el componente ProfileNotFound en lugar del diseño principal
+   styles = null;
+   widgets= null;
+} else {
+  // Si el perfil existe, cargamos los estilos y widgets
+  styles= await getAllStyleProfiles(profile.id!);
+  widgets = await getActiveWidgets(profile.id!);
+}
 ---
-
 {!profile ? (
-  <div class="error" >
-    <p>Perfil no encontrado</p>
-  </div>
+  // Si el perfil no existe, renderiza el componente ProfileNotFound
+  <ProfileNotFound username={username!} />
 ) : (
+  
 <UserLayout profile={profile!} styles={styles!}>
+  {styles?.banner && (
+        <div  
+          class:list={[
+            "content-banner",
+            styles.buttonShape || 'rounded'
+          ]}    
+          style={{
+          backgroundImage : `url(${styles?.urlBanner})`
+        }} >
+          
+        </div>
+      )}
   <div class:list={[
     'profile-container',
     styles?.adaptativeProfile ? 'adaptative-profile' : 'no-adaptative',
@@ -44,24 +62,28 @@ const widgets: WidgetUnion[] = await getActiveWidgets(profile?.id!);
     styles?.banner && 'banner',
     styles?.adaptativeProfile ? 'adaptative' : 'no-adaptative',
   ]}  >
-    {widgets.map((widget) => {
+    {(widgets ?? [] ).map((widget) => {
       if (widget.type === 'link') {
-        return <LinkWidget widget={widget} styles={styles!} />;
+        return <div class="widget-component widget-link" ><LinkWidget widget={widget} styles={styles!} /></div>;
       }
       if (widget.type === 'blog') {
-        return <BlogWidget widget={widget} styles={styles!} />;
+        return <div class:list={[
+          "widget-component",
+          "widget-blog",
+          widget.layoutStyle || 'list'
+        ]} ><BlogWidget widget={widget} styles={styles!} /> </div> ;
       }
       if(widget.type === 'timeline'){
-        return <TimelineWidget widget={widget} styles={styles!} />
+        return  <div class="widget-component widget-timeline" ><TimelineWidget widget={widget} styles={styles!} /></div>;
       }
       if(widget.type == 'listWidget' ){
-        return <SectionWidget widget={widget} styles={styles!} />
+        return <div class="widget-component widget-section" ><SectionWidget widget={widget} styles={styles!} /></div>;
       }
       if(widget.type == 'schedule' ){
-        return <ScheduleWidget widget={widget} styles={styles!}  />
+        return <div class="widget-component widget-schedule" ><ScheduleWidget widget={widget} styles={styles!}  /></div>;
       }
       if(widget.type == 'post' ){
-        return <PostWidget widget={widget} styles={styles!} />
+        return <div class="widget-component widget-post" ><PostWidget widget={widget} styles={styles!} /></div>;
       }
       // Puedes manejar otros casos aquí si es necesario
       return <p>Widget no encontrado</p> ; // Retorna `null` explícitamente si no hay coincidencia
@@ -69,9 +91,4 @@ const widgets: WidgetUnion[] = await getActiveWidgets(profile?.id!);
   </div>
   </div>
 </UserLayout>
-
-)
-
-
-}
-
+)}

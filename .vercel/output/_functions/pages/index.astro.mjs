@@ -1,11 +1,10 @@
-import { c as createComponent, r as renderTemplate, a as renderComponent, m as maybeRenderHead, d as addAttribute } from '../chunks/astro/server_C6No97fP.mjs';
+import { c as createComponent, r as renderTemplate, b as renderComponent, m as maybeRenderHead, d as addAttribute } from '../chunks/astro/server_67gsvqhm.mjs';
 import 'kleur/colors';
-import { g as getProfileByUsername, a as getAllStyleProfiles, b as getActiveWidgets, $ as $$UserLayout } from '../chunks/api_CSoBlGlj.mjs';
-import { $ as $$HeaderProfile, a as $$LinkWidget, b as $$BlogWidget, c as $$TimelineWidget, d as $$SectionWidget, e as $$ScheduleWidget, f as $$PostWidget } from '../chunks/PostWidget_CLCv2fJz.mjs';
+import { g as getProfileByUsername, a as getAllStyleProfiles, b as getActiveWidgets, $ as $$UserLayout } from '../chunks/api_CZ9fDWLy.mjs';
+import { $ as $$HeaderProfile, a as $$LinkWidget, b as $$BlogWidget, c as $$TimelineWidget, d as $$SectionWidget, e as $$ScheduleWidget, f as $$PostWidget } from '../chunks/PostWidget_9l6-gT6i.mjs';
 /* empty css                                 */
 export { renderers } from '../renderers.mjs';
 
-const prerender = false;
 const $$Index = createComponent(async ($$result, $$props, $$slots) => {
   const profileResponse = await getProfileByUsername("homes");
   const profile = profileResponse?.data || null;
@@ -51,7 +50,6 @@ const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: $$Index,
   file: $$file,
-  prerender,
   url: $$url
 }, Symbol.toStringTag, { value: 'Module' }));
 

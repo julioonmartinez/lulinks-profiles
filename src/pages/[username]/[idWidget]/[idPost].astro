@@ -77,7 +77,19 @@ export function adjustTextColor(hex: string, percentDark?: number, percentLight?
   // Si el color es oscuro, aclaramos el texto
   return lightenColor(hex, percentLight ?? 50);
 }
+export function calculateReadingTime(content:string, wordsPerMinute = 200) {
+  // Eliminar etiquetas HTML si el contenido las tiene
+  const textOnly = content.replace(/<[^>]+>/g, '');
 
+  // Contar las palabras
+  const wordCount = textOnly.split(/\s+/).length;
+
+  // Calcular el tiempo de lectura en minutos
+  const readingTimeMinutes = wordCount / wordsPerMinute;
+
+  // Redondear hacia arriba
+  return Math.ceil(readingTimeMinutes);
+}
 
 
 ---
@@ -122,7 +134,7 @@ export function adjustTextColor(hex: string, percentDark?: number, percentLight?
         </h1>
         <div class="post-meta">
           <span><i class="fa-solid fa-calendar-days"></i>{new Date( widget.dateCreated!).toLocaleDateString('es-ES')}</span>
-          <span><i class="fa-solid fa-clock"></i>{(widget.readTime ?? 5) + ' mins'}</span>
+          <span><i class="fa-solid fa-clock"></i>{ calculateReadingTime(safeContent) + ' min'}</span>
           <span><i class="fa-solid fa-user"></i>{widget.authorPost ?? (profile?.name ?? profile?.userName)}</span>
         </div>
         <div class="post-tags">

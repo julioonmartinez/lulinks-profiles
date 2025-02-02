@@ -1,8 +1,28 @@
+.content-banner{
+  min-height: 160px;
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  left: 24px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  
+  &.pill{
+    border-radius: 8px;
+  }
+  &.rounded{
+    border-radius: 8px;
+  }
+  &.square{
+    border-radius: 0;
+  }
+}
+
 .profile-container{
   display: flex;
   flex-direction: column;
   // align-items: center;
-  min-height: 100vh;
+  min-height: 100%;
   // max-width: 400px;
   padding-bottom: 60px;
   position: relative;
@@ -89,12 +109,36 @@
     padding: 0 24px;
     animation: fadeInUp 0.6s ease both;
     padding-bottom: 10rem;
+  .widget-component{
+    width: 100%;
+  }
     &.no-adaptative{
       @media (min-width:48rem) {
-        max-width: 46rem;
-        margin: 0 auto;
         padding: 0;
         padding-bottom: 10rem;
+        .widget-component{
+          max-width: 46rem;
+          margin: 0 auto;
+          // min-width: 25rem;
+          // width: 100%;
+         &.widget-link{
+          max-width: 40rem;
+         }
+        }
+      
+      }
+      @media (min-width:64rem) {
+        .widget-component{
+          max-width: 60rem;
+          margin: 0 auto;
+          &.widget-blog{
+            &.scroll{
+              // max-width: 46rem;
+            }
+           
+            
+          }
+        }
       }
     }
 

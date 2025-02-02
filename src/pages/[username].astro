@@ -30,14 +30,25 @@ if (!profile) {
   styles= await getAllStyleProfiles(profile.id!);
   widgets = await getActiveWidgets(profile.id!);
 }
-// const styles: StylesProfile | null = await getAllStyleProfiles(profile?.id!);
-// const widgets: WidgetUnion[] = await getActiveWidgets(profile?.id!);
 ---
 {!profile ? (
   // Si el perfil no existe, renderiza el componente ProfileNotFound
   <ProfileNotFound username={username!} />
 ) : (
+  
 <UserLayout profile={profile!} styles={styles!}>
+  {styles?.banner && (
+        <div  
+          class:list={[
+            "content-banner",
+            styles.buttonShape || 'rounded'
+          ]}    
+          style={{
+          backgroundImage : `url(${styles?.urlBanner})`
+        }} >
+          
+        </div>
+      )}
   <div class:list={[
     'profile-container',
     styles?.adaptativeProfile ? 'adaptative-profile' : 'no-adaptative',
@@ -53,22 +64,26 @@ if (!profile) {
   ]}  >
     {(widgets ?? [] ).map((widget) => {
       if (widget.type === 'link') {
-        return <LinkWidget widget={widget} styles={styles!} />;
+        return <div class="widget-component widget-link" ><LinkWidget widget={widget} styles={styles!} /></div>;
       }
       if (widget.type === 'blog') {
-        return <BlogWidget widget={widget} styles={styles!} />;
+        return <div class:list={[
+          "widget-component",
+          "widget-blog",
+          widget.layoutStyle || 'list'
+        ]} ><BlogWidget widget={widget} styles={styles!} /> </div> ;
       }
       if(widget.type === 'timeline'){
-        return <TimelineWidget widget={widget} styles={styles!} />
+        return  <div class="widget-component widget-timeline" ><TimelineWidget widget={widget} styles={styles!} /></div>;
       }
       if(widget.type == 'listWidget' ){
-        return <SectionWidget widget={widget} styles={styles!} />
+        return <div class="widget-component widget-section" ><SectionWidget widget={widget} styles={styles!} /></div>;
       }
       if(widget.type == 'schedule' ){
-        return <ScheduleWidget widget={widget} styles={styles!}  />
+        return <div class="widget-component widget-schedule" ><ScheduleWidget widget={widget} styles={styles!}  /></div>;
       }
       if(widget.type == 'post' ){
-        return <PostWidget widget={widget} styles={styles!} />
+        return <div class="widget-component widget-post" ><PostWidget widget={widget} styles={styles!} /></div>;
       }
       // Puedes manejar otros casos aquí si es necesario
       return <p>Widget no encontrado</p> ; // Retorna `null` explícitamente si no hay coincidencia
